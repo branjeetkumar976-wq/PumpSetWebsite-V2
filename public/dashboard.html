@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>RK Pump Dashboard</title>
+
+<link rel="stylesheet" href="css/style.css">
+
+</head>
+<body>
+
+<div class="container">
+
+<h1>🚰 RK Pump Control</h1>
+
+<!-- Customer -->
+
+<div class="card">
+
+<h2 id="welcome"></h2>
+
+<p>
+<strong>📱 Mobile :</strong>
+<span id="mobile"></span>
+</p>
+
+</div>
+<div class="card">
+
+    <h3>💰 Time Wallet</h3>
+
+    <p><b>Wallet Balance :</b>
+        <span id="walletTime">00:00:00</span>
+    </p>
+
+    <p><b>Total Purchased :</b>
+        <span id="totalPurchased">00:00:00</span>
+    </p>
+
+    <p><b>Total Used :</b>
+        <span id="totalUsed">00:00:00</span>
+    </p>
+
+</div>
+<!-- Booking -->
+
+<div class="card">
+
+<h2>🚜 Pump Booking</h2>
+
+
+<select id="hours">
+
+<option value="0">No Hour (Use Wallet)</option>
+<option value="1">1 Hour</option>
+<option value="2">2 Hour</option>
+<option value="3">3 Hour</option>
+<option value="4">4 Hour</option>
+<option value="5">5 Hour</option>
+<option value="6">6 Hour</option>
+<option value="7">7 Hour</option>
+<option value="8">8 Hour</option>
+<option value="9">9 Hour</option>
+<option value="10">10 Hour</option>
+<option value="11">11 Hour</option>
+<option value="12">12 Hour</option>
+
+</select>
+
+<h2 style="text-align:center;color:red;">
+
+Total Amount :
+₹ <span id="amount">50</span>
+
+</h2>
+
+<button id="bookBtn">
+
+🚜 Book Pump
+
+</button>
+
+<p id="msg"
+style="text-align:center;color:green;font-weight:bold;">
+</p>
+
+</div>
+<button id="finishBtn" class="finish-btn">
+    🌾 Finish सिंचाई
+</button>
+<!-- Pump Status -->
+
+<div class="card">
+
+<h2>📋 Pump Status</h2>
+
+<h2 id="pumpStatus"
+style="text-align:center;color:orange;">
+
+🟡 Waiting...
+
+</h2>
+
+<p id="statusMsg"
+style="text-align:center;">
+Waiting for Booking...
+</p>
+
+</div>
+<hr>
+
+<h3>🚰 वर्तमान में सिंचाई</h3>
+<p id="runningFarmer">Loading...</p>
+
+<h3>📌 आपका Status</h3>
+<p id="myStatus">Loading...</p>
+
+<h3>📍 Queue Position</h3>
+<p id="queuePosition">0</p>
+
+<h2>➕ Add Time</h2>
+
+<select id="addHours">
+
+    <option value="1">1 Hour (+₹50)</option>
+    <option value="2">2 Hour (+₹100)</option>
+    <option value="3">3 Hour (+₹150)</option>
+    <option value="4">4 Hour (+₹200)</option>
+    <option value="5">5 Hour (+₹250)</option>
+    <option value="6">6 Hour (+₹300)</option>
+    <option value="7">7 Hour (+₹350)</option>
+    <option value="8">8 Hour (+₹400)</option>
+    <option value="9">9 Hour (+₹450)</option>
+    <option value="10">10 Hour (+₹500)</option>
+    <option value="11">11 Hour (+₹550)</option>
+    <option value="12">12 Hour (+₹600)</option>
+
+</select>
+
+<br><br>
+
+<button id="addTimeBtn">
+    ➕ Add Time
+</button>
+
+<p id="addMsg"></p>
+
+</div>
+<!-- Payment -->
+
+<div class="card">
+
+<h2>💰 Payment</h2>
+
+<h1 style="color:red;text-align:center;">
+₹50 / Hour
+</h1>
+
+<button class="pay-btn">
+
+💳 PAY NOW
+
+</button>
+
+</div>
+
+<!-- Logout -->
+
+<div class="card">
+
+<button onclick="logout()">
+
+🚪 Logout
+
+</button>
+
+</div>
+
+</div>
+
+<script src="js/script.js"></script>
+
+</body>
+</html>

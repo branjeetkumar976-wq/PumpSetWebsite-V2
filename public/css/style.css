@@ -1,0 +1,331 @@
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
+
+body{
+
+background:#eef5ee;
+}
+
+.container{
+
+width:95%;
+max-width:700px;
+margin:30px auto;
+
+}
+
+h1{
+
+text-align:center;
+margin-bottom:20px;
+color:white;
+
+background:linear-gradient(90deg,#0b8b42,#27ae60);
+
+padding:15px;
+
+border-radius:12px;
+
+box-shadow:0 5px 15px rgba(0,0,0,.2);
+
+}
+
+.card{
+
+background:white;
+
+padding:20px;
+
+margin-bottom:20px;
+
+border-radius:15px;
+
+box-shadow:0 8px 20px rgba(0,0,0,.1);
+
+transition:.3s;
+
+}
+
+.card:hover{
+
+transform:translateY(-4px);
+
+}
+
+.card h2{
+
+margin-bottom:15px;
+
+color:#0b8b42;
+
+}
+
+input,
+select{
+
+width:100%;
+
+padding:12px;
+
+margin-top:10px;
+
+border-radius:8px;
+
+border:1px solid #ccc;
+
+font-size:16px;
+
+}
+
+button{
+
+width:100%;
+
+padding:13px;
+
+margin-top:15px;
+
+border:none;
+
+border-radius:8px;
+
+font-size:17px;
+
+cursor:pointer;
+
+background:#0b8b42;
+
+color:white;
+
+transition:.3s;
+
+}
+
+button:hover{
+
+background:#066630;
+
+}
+
+.pay-btn{
+
+background:#ff9800;
+
+}
+
+.pay-btn:hover{
+
+background:#e67e00;
+
+}
+
+.finish-btn{
+
+background:#d32f2f;
+
+}
+
+.finish-btn:hover{
+
+background:#a40000;
+
+}
+
+.logout-card button{
+
+background:#444;
+
+}
+
+.logout-card button:hover{
+
+background:black;
+
+}
+
+#pumpStatus{
+
+font-size:28px;
+
+font-weight:bold;
+
+text-align:center;
+
+margin:20px 0;
+
+}
+
+#statusMsg{
+
+text-align:center;
+
+font-size:18px;
+
+font-weight:bold;
+
+color:#444;
+
+}
+
+#msg{
+
+margin-top:15px;
+
+text-align:center;
+
+font-weight:bold;
+
+color:green;
+
+}
+/* ================= ADMIN PANEL ================= */
+
+body{
+
+    margin:0;
+    padding:0;
+    background:#f5f5f5;
+    font-family:Arial,Helvetica,sans-serif;
+
+}
+
+.container{
+
+    width:95%;
+    max-width:1200px;
+    margin:20px auto;
+
+}
+
+h1{
+
+    text-align:center;
+    color:#0a7d28;
+
+}
+
+.card{
+
+    background:#fff;
+    padding:20px;
+    margin-bottom:20px;
+    border-radius:10px;
+    box-shadow:0 2px 10px rgba(0,0,0,.15);
+
+}
+
+table{
+
+    width:100%;
+    border-collapse:collapse;
+
+}
+
+table th{
+
+    background:#0a7d28;
+    color:white;
+    padding:12px;
+
+}
+
+table td{
+
+    border:1px solid #ddd;
+    padding:10px;
+    text-align:center;
+
+}
+
+table tr:nth-child(even){
+
+    background:#f7f7f7;
+
+}
+
+button{
+
+    background:#0a7d28;
+    color:white;
+    border:none;
+    padding:10px 18px;
+    border-radius:6px;
+    cursor:pointer;
+    font-size:15px;
+
+}
+
+button:hover{
+
+    background:#06661f;
+
+}
+
+.summary{
+
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:15px;
+
+}
+
+.summary .box{
+
+    background:white;
+    border-radius:10px;
+    text-align:center;
+    padding:20px;
+    box-shadow:0 2px 8px rgba(0,0,0,.15);
+
+}
+
+.summary .box h2{
+
+    margin:0;
+    color:#0a7d28;
+
+}
+
+.summary .box p{
+
+    font-size:28px;
+    font-weight:bold;
+
+}
+
+@media(max-width:900px){
+
+.summary{
+
+grid-template-columns:repeat(2,1fr);
+
+}
+
+}
+
+@media(max-width:600px){
+
+.summary{
+
+grid-template-columns:1fr;
+
+}
+
+table{
+
+display:block;
+overflow-x:auto;
+
+}
+
+button{
+
+width:100%;
+
+}
+
+}

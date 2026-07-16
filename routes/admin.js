@@ -1,0 +1,313 @@
+
+const express = require("express");
+const router = express.Router();
+
+const Booking = require("../models/Booking");
+const Customer = require("../models/Customer");
+
+// ================= GET ALL BOOKINGS =================
+
+router.get("/bookings", async (req, res) => {
+
+    try {
+
+        const bookings = await Booking.find()
+            .populate("customerId", "name mobile")
+            .sort({ bookingDate: 1 });
+
+        res.json({
+            success: true,
+            bookings
+        });
+
+    } catch (err) {
+
+        res.status(500).json({
+            success: false,
+            message: err.message
+        });
+
+    }
+
+});
+
+// ================= FINISH PUMP =================
+
+router.put("/finish/:id", async (req, res) => {
+
+    try {
+
+        const booking = await Booking.findById(req.params.id);
+
+        if (!booking) {
+            return res.json({
+                success: false,
+                message: "Booking Not Found"
+            });
+        }
+
+        booking.remainingSeconds = Math.max(
+    0,
+    Math.floor((new Date(booking.endTime) - new Date()) / 1000)
+);
+
+booking.startTime = null;
+booking.endTime = null;
+
+booking.status = "Completed";
+
+await booking.save();
+        
+
+        // अगली Pending Booking को केवल Running बनाओ
+// Pump अपने आप Start नहीं होगा
+
+const next = await Booking.findOne({
+    status: "Pending"
+}).sort({ bookingDate: 1 });
+
+if (next) {
+
+    next.status = "Running";
+
+    // Timer अभी Start मत करो
+    next.startTime = null;
+    next.endTime = null;
+
+    await next.save();
+
+}
+
+        res.json({
+            success: true,
+            message: "🌾 सिंचाई समाप्त हो गई।"
+        });
+
+    } catch (err) {
+
+        res.status(500).json({
+            success: false,
+            message: err.message
+        });
+
+    }
+
+});
+// ================= ADMIN SUMMARY =================
+
+router.get("/summary", async (req, res) => {
+
+    try {
+
+        const running = await Booking.countDocuments({
+            status: "Running"
+        });
+
+        const pending = await Booking.countDocuments({
+            status: "Pending"
+        });
+
+        const completed = await Booking.countDocuments({
+            status: "Completed"
+        });
+
+        const income = await Booking.aggregate([
+            {
+                $group: {
+                    _id: null,
+                    total: { $sum: "$amount" }
+                }
+            }
+        ]);
+
+        res.json({
+            success: true,
+            running,
+            pending,
+            completed,
+            todayIncome: income.length ? income[0].total : 0
+        });
+
+    } catch (err) {
+
+        res.status(500).json({
+            success: false,
+            message: err.message
+        });
+
+    }
+
+});
+// ================= RUNNING PUMP =================
+
+router.get("/running", async (req, res) => {
+
+    try {
+
+        const booking = await Booking.findOne({
+            status: "Running"
+        }).populate("customerId", "name mobile");
+
+        res.json({
+            success: true,
+            booking
+        });
+
+    } catch (err) {
+
+        res.status(500).json({
+            success: false,
+            message: err.message
+        });
+
+    }
+
+});
+// ================= WAITING QUEUE =================
+
+router.get("/queue", async (req, res) => {
+
+    try {
+
+        const bookings = await Booking.find({
+            status: "Pending"
+        }).sort({
+            bookingDate: 1
+        });
+
+        res.json({
+            success: true,
+            bookings
+        });
+
+    } catch (err) {
+
+        res.status(500).json({
+            success: false,
+            message: err.message
+        });
+
+    }
+
+});
+// ================= GET ALL CUSTOMERS =================
+
+router.get("/customers", async (req, res) => {
+
+    try {
+
+        const customers = await Customer.find().sort({ name: 1 });
+
+        res.json({
+            success: true,
+            customers
+        });
+
+    } catch (err) {
+
+        res.status(500).json({
+            success: false,
+            message: err.message
+        });
+
+    }
+
+});
+
+
+// ================= TEST PUMP START =================
+
+router.put("/test-start", async (req, res) => {
+
+    try {
+
+        const booking = await Booking.findOne({
+            status: "Running"
+        });
+
+        if (!booking) {
+            return res.json({
+                success: false,
+                message: "No Running Booking"
+            });
+        }
+
+        if (!booking.startTime) {
+
+            const customer = await Customer.findById(booking.customerId);
+
+            booking.startTime = new Date();
+
+            // Wallet जितना Time है, वही Timer बनेगा
+            booking.totalSeconds = customer.walletSeconds;
+
+            booking.endTime = new Date(
+                Date.now() + customer.walletSeconds * 1000
+            );
+
+            await booking.save();
+        }
+
+        res.json({
+            success: true,
+            message: "✅ TEST Pump Started"
+        });
+
+    } catch (err) {
+
+        res.status(500).json({
+            success: false,
+            message: err.message
+        });
+
+    }
+
+});
+// ================= TEST PUMP STOP =================
+
+router.put("/test-stop", async (req, res) => {
+
+    try {
+
+        const booking = await Booking.findOne({
+            status: "Running"
+        });
+
+        if (!booking) {
+
+            return res.json({
+                success: false,
+                message: "Running Booking Not Found"
+            });
+
+        }
+
+        booking.remainingSeconds = Math.max(
+            0,
+            Math.floor(
+                (new Date(booking.endTime) - new Date()) / 1000
+            )
+        );
+
+        booking.startTime = null;
+        booking.endTime = null;
+
+        await booking.save();
+
+        res.json({
+            success: true,
+            message: "🛑 TEST PUMP STOP"
+        });
+
+    } catch (err) {
+
+        res.status(500).json({
+            success: false,
+            message: err.message
+        });
+
+    }
+
+});
+
+module.exports = router;

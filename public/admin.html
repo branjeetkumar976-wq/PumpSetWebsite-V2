@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="hi">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>RK Pump Admin</title>
+
+    <link rel="stylesheet" href="/css/style.css">
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>🚰 RK Pump Admin Panel</h1>
+
+<hr>
+
+<!-- Summary -->
+
+<div class="card">
+
+<h2>📊 Today Summary</h2>
+
+<p>🟢 Running Pump :
+<b id="runningCount">0</b></p>
+
+<p>🟡 Pending :
+<b id="pendingCount">0</b></p>
+
+<p>✅ Completed :
+<b id="completedCount">0</b></p>
+
+<p>💰 Today Income :
+₹<b id="todayIncome">0</b></p>
+
+</div>
+
+<!-- Running -->
+
+<div class="card">
+
+<h2>🚜 Current Running</h2>
+
+<p>Farmer :
+<b id="runningFarmer">None</b></p>
+
+<p>Mobile :
+<b id="runningMobile">-</b></p>
+
+<p>Remaining :
+<b id="runningTime">00:00:00</b></p>
+
+</div>
+<div class="card">
+
+<h2>🧪 Pump Test Control</h2>
+
+<button id="testStartBtn">
+    🚰 TEST PUMP START
+</button>
+
+<button id="testStopBtn"
+style="margin-left:10px;">
+    🛑 TEST PUMP STOP
+</button>
+
+<p id="testMsg"></p>
+
+</div>
+<!-- Queue -->
+
+<div class="card">
+
+<h2>⏳ Waiting Queue</h2>
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>Farmer</th>
+<th>Hours</th>
+
+</tr>
+
+</thead>
+
+<tbody id="queueTable">
+
+</tbody>
+
+</table>
+
+</div>
+
+<!-- Booking -->
+
+<div class="card">
+
+<h2>📋 All Pump Bookings</h2>
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>Farmer</th>
+
+<th>Hours</th>
+
+<th>Status</th>
+
+<th>Action</th>
+
+</tr>
+
+</thead>
+
+<tbody id="bookingTable">
+
+</tbody>
+
+</table>
+
+</div>
+
+<!-- Customers -->
+
+<div class="card">
+
+<h2>👥 Customers</h2>
+
+<table>
+
+<thead>
+
+<tr>
+
+<th>Name</th>
+
+<th>Mobile</th>
+
+<th>Wallet</th>
+
+</tr>
+
+</thead>
+
+<tbody id="customerTable">
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+<script src="/js/admin.js"></script>
+
+</body>
+
+</html>
