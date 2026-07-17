@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 const Booking = require("../models/Booking");
-const Customer = require("../models/Customer");
+const Customer = require("../models/customer");
 
 // ================= BOOK PUMP =================
 
@@ -11,12 +11,12 @@ router.post("/book", async (req, res) => {
     try {
 
         const customer = await Customer.findById(req.body.customerId);
-
+        
         if (!customer) {
 
             return res.json({
                 success: false,
-                message: "Customer Not Found"
+                message: "customer Not Found"
             });
 
         }
@@ -246,8 +246,7 @@ router.get("/status/:customerId", async (req, res) => {
 
         
 
-        // ================= Running Booking Finish =================
-
+       
         // ================= Running Booking Finish =================
 
 const customer = await Customer.findById(current.customerId);
