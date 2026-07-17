@@ -3,7 +3,7 @@ const express = require("express");
 const router = express.Router();
 
 const Booking = require("../models/Booking");
-const Customer = require("../models/Customer");
+const Customer = require("../models/customer");
 
 // ================= GET ALL BOOKINGS =================
 
