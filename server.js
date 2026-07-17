@@ -24,8 +24,10 @@ app.use("/api/admin", require("./routes/admin"));
 app.use("/api/wallet", walletRoutes);
 app.use("/api/pump", pumpRoutes);
 // Home
+const path = require("path");
+
 app.get("/", (req, res) => {
-    res.send("🚰 RK Pump Control Server Running...");
+    res.sendFile(path.join(__dirname, "public", "login.html"));
 });
 
 // Start Server
