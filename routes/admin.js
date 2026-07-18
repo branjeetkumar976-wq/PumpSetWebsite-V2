@@ -226,43 +226,70 @@ router.put("/test-start", async (req, res) => {
         });
 
         if (!booking) {
+
             return res.json({
                 success: false,
                 message: "No Running Booking"
             });
+
         }
 
-        if (!booking.startTime) {
+        // अगर Pump पहले से चालू है
+        if (booking.startTime && booking.endTime) {
 
-            const customer = await Customer.findById(booking.customerId);
+            return res.json({
+                success: true,
+                message: "Pump Already Running"
+            });
 
-            booking.startTime = new Date();
-
-            // Wallet जितना Time है, वही Timer बनेगा
-            booking.totalSeconds = customer.walletSeconds;
-
-            booking.endTime = new Date(
-                Date.now() + customer.walletSeconds * 1000
-            );
-
-            await booking.save();
         }
+
+        // Pump Start
+        booking.startTime = new Date();
+
+        // Resume Time
+        let seconds = 0;
+
+        if (booking.remainingSeconds > 0) {
+
+            // Stop के बाद Resume
+            seconds = booking.remainingSeconds;
+
+        } else {
+
+            // पहली बार Start
+            seconds = booking.totalSeconds;
+            booking.remainingSeconds = booking.totalSeconds;
+
+        }
+
+        booking.endTime = new Date(
+            Date.now() + seconds * 1000
+        );
+
+        await booking.save();
 
         res.json({
+
             success: true,
-            message: "✅ TEST Pump Started"
+            message: "✅ TEST Pump Started",
+            remainingSeconds: seconds
+
         });
 
     } catch (err) {
 
         res.status(500).json({
+
             success: false,
             message: err.message
+
         });
 
     }
 
 });
+
 // ================= TEST PUMP STOP =================
 
 router.put("/test-stop", async (req, res) => {
@@ -296,7 +323,8 @@ router.put("/test-stop", async (req, res) => {
 
         res.json({
             success: true,
-            message: "🛑 TEST PUMP STOP"
+            message: "🛑 TEST Pump STOP",
+            remainingSeconds: booking.remainingSeconds
         });
 
     } catch (err) {

@@ -51,6 +51,11 @@ totalSeconds: {
     default: 0
 },
 
+// बचा हुआ समय (सेकंड में)
+remainingSeconds: {
+    type: Number,
+    default: 0
+},
 
 // Time Wallet से Book हुआ था?
 usedWallet: {

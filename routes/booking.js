@@ -91,7 +91,7 @@ router.post("/book", async (req, res) => {
 
     totalSeconds,
 
-    remainingSeconds: 0,
+    remainingSeconds: totalSeconds,
 
     startTime: null,
 
@@ -273,6 +273,7 @@ if (!current.startTime) {
 customer.walletSeconds = remaining;
 await customer.save();
 
+current.remainingSeconds = remaining;
 current.startTime = null;
 current.endTime = null;
 current.status = "Completed";
