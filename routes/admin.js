@@ -309,17 +309,34 @@ router.put("/test-stop", async (req, res) => {
 
         }
 
+        // DEBUG LOG
+        console.log("========== TEST STOP ==========");
+        console.log("END TIME :", booking.endTime);
+        console.log("NOW      :", new Date());
+        console.log("TOTAL    :", booking.totalSeconds);
+        console.log("OLD REM  :", booking.remainingSeconds);
+
+        // बचा हुआ समय निकालो
         booking.remainingSeconds = Math.max(
             0,
             Math.floor(
-                (new Date(booking.endTime) - new Date()) / 1000
+                (new Date(booking.endTime).getTime() - Date.now()) / 1000
             )
         );
 
+        // अगली बार Resume इसी Time से होगा
+        booking.totalSeconds = booking.remainingSeconds;
+
+        console.log("NEW REM  :", booking.remainingSeconds);
+
+        // Pump Stop
         booking.startTime = null;
         booking.endTime = null;
 
         await booking.save();
+
+        console.log("SAVED REM :", booking.remainingSeconds);
+        console.log("===============================");
 
         res.json({
             success: true,
