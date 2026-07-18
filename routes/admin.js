@@ -244,10 +244,13 @@ router.put("/test-start", async (req, res) => {
 
         }
 
+        console.log("========== TEST START ==========");
+        console.log("TOTAL :", booking.totalSeconds);
+        console.log("REM   :", booking.remainingSeconds);
+
         // Pump Start
         booking.startTime = new Date();
 
-        // Resume Time
         let seconds = 0;
 
         if (booking.remainingSeconds > 0) {
@@ -263,9 +266,13 @@ router.put("/test-start", async (req, res) => {
 
         }
 
+        console.log("START FROM :", seconds);
+
         booking.endTime = new Date(
             Date.now() + seconds * 1000
         );
+
+        console.log("END TIME :", booking.endTime);
 
         await booking.save();
 
