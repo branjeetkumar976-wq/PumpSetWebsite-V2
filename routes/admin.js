@@ -330,7 +330,8 @@ router.put("/test-stop", async (req, res) => {
                 (new Date(booking.endTime).getTime() - Date.now()) / 1000
             )
         );
-
+        const customer = await Customer.findById(booking.customerId);
+        
         // अगली बार Resume इसी Time से होगा
         booking.totalSeconds = booking.remainingSeconds;
 
