@@ -102,27 +102,35 @@ router.post("/book", async (req, res) => {
 });
 
         await booking.save();
-    
-        // Cash से खरीदा हुआ Time पहले Wallet में जोड़ो
-         customer.walletSeconds += purchasedSeconds;
 
-          // History
-        customer.totalPurchasedSeconds += purchasedSeconds;
+// History
+customer.totalPurchasedSeconds += purchasedSeconds;
 
-        await customer.save();
-        
-        res.json({
+// अगर सिर्फ Wallet से Booking हुई है (No Hour)
+if (purchasedSeconds === 0) {
 
-            success: true,
+    // Wallet जैसा है वैसा रहने दो
 
-            message: "✅ Pump Booked Successfully",
+} else {
 
-            status,
+    // नई Booking के लिए खरीदा हुआ Time अभी Wallet में मत डालो
+    // Finish/Stop पर बचा हुआ Time Wallet में जाएगा
 
-            totalSeconds
+}
 
-        });
+await customer.save();
 
+res.json({
+
+    success: true,
+
+    message: "✅ Pump Booked Successfully",
+
+    status,
+
+    totalSeconds
+
+});
     } catch (err) {
 
         res.status(500).json({
