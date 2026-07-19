@@ -340,7 +340,7 @@ async function loadPumpStatus() {
 }
 
 
-// ================= LIVE STATUS =================
+/// ================= LIVE STATUS =================
 
 let timer = null;
 
@@ -358,18 +358,24 @@ async function loadLiveStatus() {
 
         if (!data.success) return;
 
+        // ===== DEBUG =====
+        console.log(
+            "Live:",
+            data.startTime,
+            data.endTime,
+            data.remainingSeconds
+        );
+
         document.getElementById("runningFarmer").innerHTML =
             data.runningFarmer;
 
         document.getElementById("myStatus").innerHTML =
             data.myStatus;
 
-        console.log(data);
-
         document.getElementById("queuePosition").innerHTML =
             data.queuePosition;
 
-        // 👇 Pump Start हुआ है
+        // Pump Running
         if (data.startTime && data.endTime) {
 
             updateWalletTimer(data.endTime);
@@ -390,7 +396,6 @@ async function loadLiveStatus() {
     }
 
 }
-
 
 
 // ================= TIME FORMAT =================
@@ -429,22 +434,21 @@ async function loadWallet() {
 
         if (result.success) {
 
-            // Pump Start नहीं है तभी Wallet दिखाओ
-            if (!liveData.startTime) {
+    console.log("Wallet API =", result.walletSeconds);
 
-                document.getElementById("walletTime").innerHTML =
-                    secToTime(result.walletSeconds);
+    if (!liveData.startTime) {
 
-            }
+        document.getElementById("walletTime").innerHTML =
+            secToTime(result.walletSeconds);
 
-            document.getElementById("totalPurchased").innerHTML =
-                secToTime(result.totalPurchasedSeconds);
+    }
 
-            document.getElementById("totalUsed").innerHTML =
-                secToTime(result.totalUsedSeconds);
+    document.getElementById("totalPurchased").innerHTML =
+        secToTime(result.totalPurchasedSeconds);
 
-        }
-
+    document.getElementById("totalUsed").innerHTML =
+        secToTime(result.totalUsedSeconds);
+}
     } catch (err) {
 
         console.log(err);
