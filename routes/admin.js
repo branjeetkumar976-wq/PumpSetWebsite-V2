@@ -297,7 +297,7 @@ router.put("/test-start", async (req, res) => {
 
 });
 
-// ================= TEST PUMP STOP =================
+/// ================= TEST PUMP STOP =================
 
 router.put("/test-stop", async (req, res) => {
 
@@ -316,7 +316,7 @@ router.put("/test-stop", async (req, res) => {
 
         }
 
-        // DEBUG LOG
+        // ===== DEBUG =====
         console.log("========== TEST STOP ==========");
         console.log("END TIME :", booking.endTime);
         console.log("NOW      :", new Date());
@@ -324,39 +324,54 @@ router.put("/test-stop", async (req, res) => {
         console.log("OLD REM  :", booking.remainingSeconds);
 
         // बचा हुआ समय निकालो
-        booking.remainingSeconds = Math.max(
+        const remaining = Math.max(
             0,
             Math.floor(
                 (new Date(booking.endTime).getTime() - Date.now()) / 1000
             )
         );
-        const customer = await Customer.findById(booking.customerId);
-        
-        // अगली बार Resume इसी Time से होगा
-        booking.totalSeconds = booking.remainingSeconds;
 
-        console.log("NEW REM  :", booking.remainingSeconds);
+        console.log("NEW REM  :", remaining);
 
-        // Pump Stop
+        // Booking Update
+        booking.remainingSeconds = remaining;
+        booking.totalSeconds = remaining;
         booking.startTime = null;
         booking.endTime = null;
 
         await booking.save();
 
+        // Customer Wallet Update
+        const customer = await Customer.findById(booking.customerId);
+
+        if (customer) {
+
+            customer.walletSeconds = remaining;
+
+            await customer.save();
+
+            console.log("CUSTOMER WALLET :", customer.walletSeconds);
+
+        }
+
         console.log("SAVED REM :", booking.remainingSeconds);
         console.log("===============================");
 
         res.json({
+
             success: true,
             message: "🛑 TEST Pump STOP",
-            remainingSeconds: booking.remainingSeconds
+            remainingSeconds: remaining
+
         });
 
     } catch (err) {
 
         res.status(500).json({
+
             success: false,
             message: err.message
+
         });
 
     }
