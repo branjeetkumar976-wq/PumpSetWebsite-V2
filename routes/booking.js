@@ -452,11 +452,23 @@ router.put("/add-time", async (req, res) => {
 
         }
 
+        const customer = await Customer.findById(customerId);
+
         const addSeconds = Number(hours) * 3600;
+
+        // History
+        customer.totalPurchasedSeconds += addSeconds;
+
+        // Wallet बढ़ाओ
+        customer.walletSeconds += addSeconds;
+
+        // Booking भी बढ़ाओ
+        booking.totalSeconds = customer.walletSeconds;
+        booking.remainingSeconds = customer.walletSeconds;
 
         booking.amount += Number(hours) * 50;
 
-        // अगर Pump Start है तो End Time बढ़ाओ
+        // अगर Pump चल रहा है
         if (
 
             booking.status === "Running" &&
@@ -467,33 +479,20 @@ router.put("/add-time", async (req, res) => {
 
             booking.endTime = new Date(
 
-                booking.endTime.getTime() + addSeconds * 1000
+                Date.now() + customer.walletSeconds * 1000
 
             );
 
         }
 
+        await customer.save();
         await booking.save();
-
-        const customer = await Customer.findById(customerId);
-
-        if (customer) {
-
-        // Wallet में नया Time जोड़ो
-        customer.walletSeconds += addSeconds;
-
-        // History
-         customer.totalPurchasedSeconds += addSeconds;
-
-         await customer.save();
-
-     }
 
         res.json({
 
             success: true,
 
-            message: `✅ ${hours} Hour Successfully Added`
+            message: "✅ Time Added Successfully"
 
         });
 

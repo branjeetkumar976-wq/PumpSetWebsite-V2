@@ -234,7 +234,6 @@ router.put("/test-start", async (req, res) => {
 
         }
 
-        // अगर Pump पहले से चालू है
         if (booking.startTime && booking.endTime) {
 
             return res.json({
@@ -244,43 +243,28 @@ router.put("/test-start", async (req, res) => {
 
         }
 
-        console.log("========== TEST START ==========");
-        console.log("TOTAL :", booking.totalSeconds);
-        console.log("REM   :", booking.remainingSeconds);
+        const customer = await Customer.findById(booking.customerId);
 
-        // Pump Start
         booking.startTime = new Date();
 
-        let seconds = 0;
+        // Wallet से Timer शुरू होगा
+        booking.remainingSeconds = customer.walletSeconds;
 
-        if (booking.remainingSeconds > 0) {
-
-            // Stop के बाद Resume
-            seconds = booking.remainingSeconds;
-
-        } else {
-
-            // पहली बार Start
-            seconds = booking.totalSeconds;
-            booking.remainingSeconds = booking.totalSeconds;
-
-        }
-
-        console.log("START FROM :", seconds);
+        booking.totalSeconds = customer.walletSeconds;
 
         booking.endTime = new Date(
-            Date.now() + seconds * 1000
+            Date.now() + customer.walletSeconds * 1000
         );
-
-        console.log("END TIME :", booking.endTime);
 
         await booking.save();
 
         res.json({
 
             success: true,
+
             message: "✅ TEST Pump Started",
-            remainingSeconds: seconds
+
+            remainingSeconds: customer.walletSeconds
 
         });
 
@@ -289,6 +273,7 @@ router.put("/test-start", async (req, res) => {
         res.status(500).json({
 
             success: false,
+
             message: err.message
 
         });
