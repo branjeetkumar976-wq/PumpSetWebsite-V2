@@ -106,17 +106,15 @@ router.post("/book", async (req, res) => {
 // History
 customer.totalPurchasedSeconds += purchasedSeconds;
 
-// अगर सिर्फ Wallet से Booking हुई है (No Hour)
-if (purchasedSeconds === 0) {
+// ⭐ खरीदा हुआ Time तुरंत Wallet में जोड़ो
+customer.walletSeconds += purchasedSeconds;
 
-    // Wallet जैसा है वैसा रहने दो
+// Booking भी उसी Time से चलेगी
+booking.totalSeconds = customer.walletSeconds;
+booking.remainingSeconds = customer.walletSeconds;
 
-} else {
-
-    // नई Booking के लिए खरीदा हुआ Time अभी Wallet में मत डालो
-    // Finish/Stop पर बचा हुआ Time Wallet में जाएगा
-
-}
+await booking.save();
+await customer.save();
 
 await customer.save();
 
