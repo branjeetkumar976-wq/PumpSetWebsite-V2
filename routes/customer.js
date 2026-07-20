@@ -117,7 +117,7 @@ router.post("/forgot-password", async (req, res) => {
 });
 // ================= RESET PASSWORD =================
 
-router.post("/reset-password", async (req, res) => {
+router.put("/reset-password", async (req, res) => {
 
     try {
 
@@ -145,7 +145,7 @@ router.post("/reset-password", async (req, res) => {
 
             success: true,
 
-            message: "Password Changed Successfully"
+            message: "✅ Password Changed Successfully"
 
         });
 
